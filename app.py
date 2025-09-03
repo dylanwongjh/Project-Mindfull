@@ -30,7 +30,7 @@ except Exception as e:
 def home():
     # In a typical setup, you would serve an index.html file here.
     # For a simple API, we'll just return a message.
-    return "MindfulCompanion API is running!"
+    return render_template('index.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
