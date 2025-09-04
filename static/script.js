@@ -89,12 +89,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add message to chat UI
     function addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.classList.add(sender + '-message');
-        messageDiv.textContent = text;
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('chat-message', sender + '-message');
+
+        const messageContent = document.createElement('div');
+        messageContent.classList.add('message-content');
+        messageContent.textContent = text;
         
-        chatMessages.appendChild(messageDiv);
+        messageContainer.appendChild(messageContent);
+        chatMessages.appendChild(messageContainer);
+        
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
