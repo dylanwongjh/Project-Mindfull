@@ -117,13 +117,7 @@ class MindfulCompanion:
 
             # Systematically split the response into sentences
             raw_text = (response.text or "").strip()
-            messages = [s.strip() for s in re.split(r'(?<=[,?!])\s*', raw_text) if s.strip()]
-
-            # If split doesnt work then return the original text
-            if not messages:
-                messages = [raw_text]
-            
-            return messages
+            return raw_text if raw_text else "I'm here with you. Could you share a bit more about how you're feeling right now?"
         except Exception as e:
             # Return a user-friendly error message
             return f"Error: Failed to generate a response. Please check your API key and network connection. Details: {e}"
