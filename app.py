@@ -92,7 +92,7 @@ class MindfulCompanion:
 
     def start(self):
         """Generates a starting message for the user."""
-        return "Hello, I'm your Mindful Companion. I'm here to listen and support you. How are you feeling today?"
+        return "Hello, I am Project Mindfull. Your personal healthcare companion. How are you today?"
 
     def reply(self, chat_history):
         """
@@ -175,6 +175,4 @@ def get_resources():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
 
