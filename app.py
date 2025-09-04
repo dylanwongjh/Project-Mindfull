@@ -31,6 +31,29 @@ class MindfulCompanion:
         "models/gemini-pro",  # Alternative format
     ]
 
+    SYSTEM_PROMPT = (
+        "You are MindfulCompanion, a supportive, empathetic mental wellbeing assistant. "
+        "Your purpose is to help users feel heard, explore their feelings, and discover healthy, evidence-based coping strategies.\n\n"
+        "Core guidelines:\n"
+        "- Be warm, validating, and non-judgmental.\n"
+        "- Keep replies concise: A few sentences.\n"
+        "- Ask exactly one gentle, open-ended question to help the user reflect or move forward.\n"
+        "- Offer practical suggestions when appropriate (e.g., grounding, breathing, journaling, CBT-style reframing, sleep hygiene).\n"
+        "- Do not diagnose or provide professional therapy; you are not a replacement for a clinician.\n"
+        "- Avoid medical or legal advice.\n"
+        "- Use plain text (no heavy markdown).\n\n"
+        "Safety:\n"
+        "- If the user mentions intent to harm themselves/others, feels unsafe, or describes an emergency, respond with calm empathy, encourage contacting local emergency services or a trusted person, and provide crisis support suggestions.\n"
+        "- If in crisis, clearly encourage immediate help; you cannot contact services on their behalf.\n\n"
+        "Privacy and respect:\n"
+        "- Do not request identifying information.\n"
+        "- Mirror the user's language when reasonable; if the user writes in a language other than English, reply in that language.\n\n"
+        "Tone and formatting:\n"
+        "- Keep it supportive and practical.\n"
+        "- Speak as if you are a therapist. Do not use technical jargon or complex language.\n"
+        "- Use short sentences and simple words, no asterisks.\n"
+    )
+
     # Crisis resources - important for mental health applications
     CRISIS_RESOURCES = {
         "Singapore": {
@@ -57,6 +80,18 @@ class MindfulCompanion:
         # Configure the genai library with the API key
         genai.configure(api_key=self.api_key)
 
+        # Prepare a configured model with a clear system instruction
+        self.model = genai.GenerativeModel(
+            self.MODELS[0],
+            system_instruction=self.SYSTEM_PROMPT,
+            generation_config={
+                "temperature": 0.6,
+                "top_p": 0.9,
+                "top_k": 40,
+                "max_output_tokens": 512,
+            },
+        )
+
     def start(self):
         """Generates a starting message for the user."""
         return "Hello, I'm your Mindful Companion. I'm here to listen and support you. How are you feeling today?"
@@ -73,9 +108,6 @@ class MindfulCompanion:
             The assistant's response as a string, or an error message if generation fails.
         """
         try:
-            # Use the gemini-2.5-flash-preview-05-20 model for conversation
-            model = genai.GenerativeModel("gemini-2.5-flash-preview-05-20")
-
             # Correct the roles for the API
             contents = [
                 {"role": message["role"] if message["role"] == "user" else "model", "parts": [message["content"]]}
@@ -83,19 +115,11 @@ class MindfulCompanion:
             ]
             
             # Send the request to the AI
-            response = model.generate_content(contents)
-            
-            # Programmatically split the response into sentences
-            # This is more reliable than asking the AI to do it
-            raw_text = response.text.strip()
-            # This regex splits by punctuation while keeping it, resulting in a list of sentences
-            messages = [s.strip() for s in re.split(r'(?<=[.?!])\s*', raw_text) if s.strip()]
-            
-            # If for some reason the split fails, return the original text in a list
-            if not messages:
-                messages = [raw_text]
+            response = self.model.generate_content(contents)
 
-            return messages
+            # Normalize to a single plain-text message for the frontend
+            raw_text = (response.text or "").strip()
+            return raw_text if raw_text else "I'm here with you. Could you share a bit more about how you're feeling right now?"
         except Exception as e:
             # Return a user-friendly error message
             return f"Error: Failed to generate a response. Please check your API key and network connection. Details: {e}"
@@ -153,4 +177,6 @@ def get_resources():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
