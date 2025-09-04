@@ -16,7 +16,7 @@ except ImportError:
         print("Error: GEMINI_API_KEY not found. Please set it in config.py or as an environment variable.")
         exit(1)
 
-app = Flask(name, static_folder = 'static', template_folder = 'templates') # set static and template folders
+app = Flask(__name__, static_folder = 'static', template_folder = 'templates') # set static and template folders
 CORS(app)
 
 # Configure the Generative AI client
