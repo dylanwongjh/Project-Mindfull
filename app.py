@@ -45,7 +45,6 @@ class MindfulCompanion:
         "- If the user mentions intent to harm themselves/others, feels unsafe, or describes an emergency, respond with calm empathy, encourage contacting local emergency services or a trusted person, and provide crisis support suggestions.\n"
         "- If in crisis, clearly encourage immediate help; you cannot contact services on their behalf.\n\n"
         "Privacy and respect:\n"
-        "- Do not request identifying information.\n"
         "- Mirror the user's language when reasonable; if the user writes in a language other than English, reply in that language.\n\n"
         "Tone and formatting:\n"
         "- Keep it supportive and practical.\n"
@@ -116,9 +115,15 @@ class MindfulCompanion:
             # Send the request to the AI
             response = self.model.generate_content(contents)
 
-            # Normalize to a single plain-text message for the frontend
+            # Systematically split the response into sentences
             raw_text = (response.text or "").strip()
-            return raw_text if raw_text else "I'm here with you. Could you share a bit more about how you're feeling right now?"
+            messages = [s.strip() for s in re.split(r'(?<=[,?!])\s*', raw_text) if s.strip()]
+
+            # If split doesnt work then return the original text
+            if not messages:
+                messages = [raw_text]
+            
+            return messages
         except Exception as e:
             # Return a user-friendly error message
             return f"Error: Failed to generate a response. Please check your API key and network connection. Details: {e}"
