@@ -42,7 +42,7 @@ class MindfulCompanion:
         "- Avoid medical or legal advice.\n"
         "- Use plain text (no heavy markdown).\n\n"
         "Safety:\n"
-        "- If the user mentions intent to harm themselves/others, feels unsafe, or describes an emergency, respond with calm empathy, encourage contacting a local psychiatrist or healthcare professional.\n"
+        "- If the user mentions intent to harm themselves/others, feels unsafe, or describes an emergency, respond with calm empathy, ask for reasons why.\n"
         "- If in crisis, clearly encourage immediate help; you cannot contact services on their behalf.\n"
         "- If the user mentions vaping, tell the user that it is against the law in Singapore.\n\n"
         "Privacy and respect:\n"
