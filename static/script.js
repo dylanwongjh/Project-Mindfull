@@ -8,7 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let chatHistory = [];
     
-    // Initialize the chat
+    // this function makes it so that the latest message sent is always targeted.
+    function smoothScrollToBottom() {
+        const chatContainer = document.querySelector('.chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    // initialising the chat
     async function initChat() {
         showTyping();
         try {
@@ -37,27 +48,27 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }
     }
-
-    // Send user message and get response
+    
+    // send user message and get a response
     async function sendMessage() {
         const message = userInput.value.trim();
         if (!message) return;
         
-        // Add user message to chat
+        // add user message to chat
         addMessage(message, 'user');
         chatHistory.push({
             role: 'user',
             content: message
         });
         
-        // Clear input
+        // clear input
         userInput.value = '';
         
         // Show typing indicator
         showTyping();
         
         try {
-            // Send message to backend
+            // send message to backend
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
@@ -86,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }
     }
-    // Add message to chat UI
+    
     function addMessage(text, sender) {
         const messageContainer = document.createElement('div');
         messageContainer.classList.add('chat-message', sender + '-message');
@@ -98,21 +109,26 @@ document.addEventListener('DOMContentLoaded', function() {
         messageContainer.appendChild(messageContent);
         chatMessages.appendChild(messageContainer);
         
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        setTimeout(() => {
+            smoothScrollToBottom();
+        }, 100);
     }
     
-    // Show typing indicator
+    // show typing indicator
     function showTyping() {
         typingIndicator.style.display = 'flex';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Enhanced scrolling for typing indicator
+        setTimeout(() => {
+            smoothScrollToBottom();
+        }, 100);
     }
     
-    // Hide typing indicator
+    // hide typing indicator
     function hideTyping() {
         typingIndicator.style.display = 'none';
     }
     
-    // Load crisis resources
+    // load the mental health resources
     async function loadResources() {
         if (resourcesContent.style.display === 'block') {
             resourcesContent.style.display = 'none';

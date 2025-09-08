@@ -1,4 +1,4 @@
-/* Updated to match Mindful logo color scheme */
+/* NICEST ONE HAHAHAHAH */
 /* General body and container styles */
 :root {
     font-size: 100%; /* 1rem = 16px by default */
@@ -13,11 +13,15 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, var(--primary-peach) 0%, var(--secondary-peach) 100%);
+    background: url('grid-background.png');
+    background-size: 80px 80px; /* Adjust size as needed */
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-color: #f8f9fa; /* Light background color behind grid */
     color: var(--dark-navy);
     line-height: 1.6;
     min-height: 100vh;
-    padding: 1.25rem; /* 20px */
+    padding: 1.25rem;
 }
 
 .container {
@@ -283,7 +287,10 @@ header p {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, var(--primary-peach) 0%, var(--secondary-peach) 100%);
+    background: url('grid-background.png');
+    background-size: 80px 80px;
+    background-repeat: repeat;
+    background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
     align-items: center;
